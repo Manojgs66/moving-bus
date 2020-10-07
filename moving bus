@@ -1,0 +1,402 @@
+#include<windows.h>
+#include<GL/glut.h>
+#include<math.h>
+#include<string.h>
+#include<stdio.h>
+
+int theta =0 ,n,j,axis=-1,t=10000,x=1,s=1;
+double i;
+float x1=-195,x2=-155,x3=-175,x4=-200,x5=-150,x6=-170,x7=-180,x8=0,x9=20;
+float d=0.25,dir=-1,st=0;
+
+void translation()                    //Function for moving objects in the back ground
+{
+	x1=x1+d*dir;
+	x2=x2+d*dir;
+	x3=x3+d*dir;
+	x4=x4+d*dir;
+	x5=x5+d*dir;
+	x6=x6+d*dir;
+	x7=x7+d*dir;
+	x8=x8+d*dir;
+	x9=x9+d*dir;
+	
+	if(x1>=200) {x1=-195;x2=-155;x3=-175;x4=-200,x5=-150;x6=-180,x7=-170;}
+	if(x4<-200) {x1=195;x2=155;x3=175;x4=200;x5=150;x6=180,x7=170;}
+	if(x8>200) {x8=-200;x9=-180;}
+	if(x9<-200) {x8=180;x9=200;}
+
+	glColor3f(0,.80,0.5);           //Gate
+	glBegin(GL_POLYGON);        
+		glVertex3f(x6,-50,2);
+		glVertex3f(x6,-10,2);
+		glVertex3f(x7,-10,2);
+		glVertex3f(x7,-50,2);
+	glEnd();
+	
+	
+	glColor3f(1,1,0);				//House
+	glBegin(GL_POLYGON);              
+		glVertex3f(x1,10,1);
+		glVertex3f(x2,10,1);
+		glVertex3f(x2,-50,1);
+		glVertex3f(x1,-50,1);
+	glEnd();
+	
+	glBegin(GL_TRIANGLES);        //Roof
+		glVertex3f(x3,50,1);
+		glVertex3f(x4,10,1);
+		glVertex3f(x5,10,1);
+	glEnd();
+	glColor3f(0,0,0);             //Lamp
+	glLineWidth(5.0);
+	glBegin(GL_LINES);        
+		glVertex3f(x8,-50,1);
+		glVertex3f(x8,70,1);
+		glVertex3f(x8,70,1);
+		glVertex3f(x9,70,1);
+	glEnd();
+	glPointSize(15.0);
+
+	glBegin(GL_POINTS);			//Lamp Light
+		glVertex3f(x9,70,1);
+	glEnd();
+
+	glFlush();
+	glutPostRedisplay();
+}
+
+void body()							//Function for static objects
+{
+
+	glColor3f(0.6,0.6,1.0);   //Sky
+	glBegin(GL_POLYGON);        
+		glVertex3f(-200,200,0);
+		glVertex3f(200,200,0);
+		glVertex3f(200,-50,0);
+		glVertex3f(-200,-50,0);
+	glEnd();
+
+	glColor3f(0.4,0.3,0.3);   //Road
+	glBegin(GL_POLYGON);
+		glVertex3f(200,-50,0);
+		glVertex3f(-200,-50,0);	
+		glVertex3f(-200,-200,0);
+		glVertex3f(200,-200,0);
+	glEnd();
+
+	glColor3f(1,0,0);      //Bus......1
+	glBegin(GL_POLYGON); 
+		glVertex3f(150,95,4);
+		glVertex3f(150,-55,4);	
+		glVertex3f(-150,-55,4);
+		glVertex3f(-150,95,4);
+	glEnd();
+
+
+	glColor3f(1,0,0);      //Bus.....2
+	glBegin(GL_POLYGON); 
+		glVertex3f(-37,-50,4);
+		glVertex3f(-37,-105,4);	
+		glVertex3f(37,-105,4);
+		glVertex3f(37,-50,4);
+	glEnd();
+
+	glColor3f(1,0,0);      //Bus.....3
+	glBegin(GL_POLYGON); 
+		glVertex3f(115,-50,4);
+		glVertex3f(115,-105,4);	
+		glVertex3f(150,-105,4);
+		glVertex3f(150,-50,4);
+	glEnd();
+	
+	glColor3f(1,0,0);      //Bus.....4
+	glBegin(GL_POLYGON); 
+		glVertex3f(-115,-50,4);
+		glVertex3f(-115,-105,4);	
+		glVertex3f(-150,-105,4);
+		glVertex3f(-150,-50,4);
+	glEnd();
+
+
+	
+	glColor3f(1,1,0);      //Door
+	glBegin(GL_POLYGON); 
+		glVertex3f(3,-105,5);
+		glVertex3f(3,80,5);	
+		glVertex3f(36,80,5);
+		glVertex3f(36,-105,5);
+	glEnd();
+
+
+		glColor3f(0,0,0);//Door Handle
+	glLineWidth(15.0);
+		glBegin(GL_LINES); 
+		glVertex3f(30,-10,6);
+		glVertex3f(35,-10,6);	
+	glEnd();
+
+
+for(i=0;i<8;i++)	 //Bus.....Window
+	{
+	if(i==4) continue;
+	glBegin(GL_POLYGON); 
+		glColor3f(0,0,0); 
+		glVertex3f(-135+(35*i),72,5);
+		glVertex3f(-135+(35*i),22,5);	
+		glColor3f(1,1,1);
+		glVertex3f(-105+(35*i),22,5);
+		glVertex3f(-105+(35*i),72,5);
+	glEnd();
+	}
+	
+
+
+	for(i=0;i<7;i++)	 //Road Divider
+	{
+	glBegin(GL_POLYGON); 
+		glColor3f(1,1,1);
+		glVertex3f(-200+(65*i),-120,5);
+		glVertex3f(-200+(65*i),-130,5);	
+		glVertex3f(-160+(65*i),-130,5);
+		glVertex3f(-160+(65*i),-120,5);
+	glEnd();
+	}
+
+	//Printing BMTC 500F
+
+	glPushMatrix();
+	glColor3f(0,0,1);
+	
+	glLineWidth(2.0);
+	glTranslatef(-240.0,-20.0,10.0);
+	glScalef(0.3,0.19,0.0);
+	glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN,' ');
+	glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN,' ');
+	glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN,' ');
+	glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN,'B');
+	glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN,'M');
+	glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN,'T');
+	glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN,'C');
+	
+	glTranslatef(390.0,520.0,10.0);
+	glScalef(0.45,0.7,6.0);
+	glutStrokeCharacter(GLUT_STROKE_ROMAN,'5');
+	glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN,'0');
+	glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN,'0');
+	glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN,'F');
+	
+	glPopMatrix();
+}
+
+
+void wheels()					//Function to draw wheels
+{	
+	glLineWidth(3.0);
+	glPointSize(2.0);
+	glColor3f(0,0,0);
+	glBegin(GL_LINES);
+		glVertex3f(20,0,10);
+		glVertex3f(-20,0,10);
+		glVertex3f(0,20,10);
+		glVertex3f(0,-20,10);	
+	glEnd();
+
+
+	glBegin(GL_POINTS);
+		glVertex2f(0,0);
+	glEnd();
+
+	glBegin(GL_POINTS);
+	for(j=15;j<37;j++)
+	for(i=0;i<360;i++)
+	{
+			glVertex3f(j*cos(i),j*sin(i),10);
+	}
+	glEnd();
+}
+
+
+void display()					//Function to display every thing and provide rotation
+{
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+	
+	body();
+
+	glPushMatrix();
+	glTranslatef(-75,-95,0);
+	glRotatef(theta,0.0,0.0,1.0);
+	wheels();
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(75,-95,0);
+	glRotatef(theta,0.0,0.0,1.0);
+	wheels();
+	glPopMatrix();
+	
+	glPushMatrix();
+	translation();
+	glPopMatrix();
+	
+	glFlush();
+	glutSwapBuffers();
+}
+
+void spin()
+{
+	theta+=5*axis;
+	if(theta>360)
+		theta=0;
+	glutPostRedisplay();
+}
+
+void mytimer(int v)
+{
+	glutTimerFunc(t/60,mytimer,v);
+	spin();
+	translation();
+}
+
+void main_menu(int index)
+{	
+	switch(index)
+	{
+	case(1):
+		{
+			t/=10;
+			d+=0.15;
+			glutPostRedisplay();
+			break;
+		}
+	case(2):
+		{
+			t*=10;
+			d-=0.15;
+			glutPostRedisplay();
+			break;
+		}
+	case(3):
+		{
+			axis=-1;
+			dir=-1;
+			glutPostRedisplay();
+			break;
+		}
+	case(4):
+		{
+			axis=1;
+			dir=1;
+			glutPostRedisplay();
+			break;
+		}
+	case(5):
+		{
+			axis=0;
+			d=0;
+			glutPostRedisplay();
+			break;
+		}
+	case(6):
+		{
+			
+			axis=1;
+			d=0.25;
+			glutPostRedisplay();
+			break;
+		}
+	case(7):
+		{
+			exit(0);
+		}
+	}
+}
+
+void menu()
+{
+	glutCreateMenu(main_menu);
+	glutAddMenuEntry("Speed Increase",1);
+	glutAddMenuEntry("Speed Decrease",2);
+	glutAddMenuEntry("Front Movement",3);
+	glutAddMenuEntry("Back Movement",4);
+	glutAddMenuEntry("Stop",5);
+	glutAddMenuEntry("Start",6);
+	glutAddMenuEntry("Exit",7);
+
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
+
+void keys(unsigned char key,int x,int y)
+{
+	if(key=='I'  || key=='i') 
+		{
+			t/=10;
+			d+=0.15;
+		}
+	if(key=='D' || key=='d')
+		{
+			t*=10;
+			d-=0.15;
+		}
+	if(key=='F' || key == 'f') 
+		{
+			axis=-1;
+			dir=-1;
+		}
+	if(key=='B' || key=='b') 
+		{
+			axis=1;
+			dir=1;
+		}
+	if(key=='S' || key == 's') 
+		{
+			axis=0;
+			d=0;
+		}
+if(key=='R' || key == 'r') 
+		{
+			axis=1;
+			d=0.25;
+
+		}
+
+	if(key==27)
+		exit(0);
+}
+
+
+int main(int argc,char **argv)
+{
+	glutInit(&argc,argv);
+	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB|GLUT_DEPTH);
+	glutInitWindowSize(1280,800);
+	glutInitWindowPosition(0,0);
+	glutCreateWindow("ANIMATION -- Bus");
+
+	glEnable(GL_DEPTH_TEST);
+
+	printf("\nKEY USAGE : \n\n");
+	printf("--------------------------------\n");
+	printf("I or i -> Increase Speed\n");	
+	printf("D or d -> Decrease Speed\n");
+	printf("F or f -> Front Movement\n");
+	printf("B or b -> Back Movement\n");
+	printf("R or r -> Start\n");
+	printf("S or s -> Stop\n");
+	printf("ESC    -> Exit \n");
+	printf("--------------------------------\n");
+	printf("\nMenu can also be generated on RIGHT MOUSE CLICK");
+	glutTimerFunc(100,mytimer,60);
+	glutKeyboardFunc(keys);
+	menu();
+
+	glOrtho(-200,200,-200,200,-10,10);
+	
+	glClearColor(1,1,1,1);
+	glutDisplayFunc(display);
+	glutMainLoop();
+}
+
+
+
+
